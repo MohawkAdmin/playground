@@ -1,37 +1,44 @@
 version: 2.1
-# Use a package of configuration called an orb.
-orbs:
-  # Choose either one of the orbs below
-  # welcome: circleci/welcome-orb@0.4.1
-  # aws-cli: circleci/aws-cli@2.0.3
-# Define the jobs we want to run for this project
-jobs:
-  #myjob1:  # Choose any name, such as `build`
-      # The primary container, where your job's commands will run
-      #docker:
-      #  - image: 
-      #steps:
-      #  - checkout # check out the code in the project directory
-      #  - run: echo "hello world" # run the `echo` command
 
-  create_infrastructure: 
+jobs:
+
+  #create_infrastructure: 
+      #docker:
+        #- image: amazon/aws-cli
+      #steps:
+        #- checkout
+        #- run:
+            #name: Create Cloudformation Stack
+            #command: |
+              #aws cloudformation deploy \
+                #--template-file template.yml \
+                #--stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
+                #--region us-east-1
+
+  # Exercise: Config and Deployment
+  configure_infrastructure: 
       docker:
-        - image: amazon/aws-cli
+        - image: python:3.7-alpine3.11
       steps:
         - checkout
+        - add_ssh_keys:
+                # You can get this ID in the section where you registered the SSH Key
+                fingerprints: ["3a:e4:b6:ba:db:04:12:45:06:b1:5a:21:96:c6:0d:d0"] 
         - run:
-            name: Create Cloudformation Stack
+            name: Install Ansible
             command: |
-              aws cloudformation deploy \
-                --template-file template.yml \
-                --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
-                --region us-east-1  
+              apk add --update ansible
+        - run:
+            name: Run Playbook and Configure server
+            command: |
+              ansible-playbook -i inventory.txt main.yml
 
 # Sequential workflow
 workflows:
   # Name the workflow
   myWorkflow:
     jobs:
-      - create_infrastructure
+      - configure_infrastructure 
+      # create_infrastructure
       # - myjob1
       # - myjob2
