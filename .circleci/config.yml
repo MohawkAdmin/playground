@@ -57,6 +57,8 @@ jobs:
             # Fail the job intentionally to simulate an error.
             command:  return 1
         - destroy_environment
+            when: on fail
+            
             # command: |
             #   URL="https://blog.udacity.com/"  
             #   # Test if website exists
@@ -75,4 +77,4 @@ workflows:
     jobs:
         # - configure_infrastructure 
         - create_infrastructure
-        # - smoke_test
+        - smoke_test
