@@ -57,7 +57,7 @@ jobs:
             # Fail the job intentionally to simulate an error.
             command:  return 1
         - destroy_environment
-            when: on fail
+            when: on_fail
             
             # command: |
             #   URL="https://blog.udacity.com/"  
