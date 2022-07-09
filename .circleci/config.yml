@@ -11,7 +11,7 @@ commands:
             when: on_fail
             command: 
               # whoami
-              cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7}
+              aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7}
 
 jobs:
 
