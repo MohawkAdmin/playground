@@ -49,7 +49,6 @@ jobs:
 
   # Exercise: Smoke Testing
   smoke_test:
-      needs: create_infrastructure
       docker:
         - image: amazon/aws-cli  # alpine:latest
       steps:
